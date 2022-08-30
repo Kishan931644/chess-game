@@ -1,10 +1,9 @@
 const whitePieces = document.querySelectorAll(".white-piece");
 const blackPieces = document.querySelectorAll(".black-piece");
 let currentSoldier;
-let posibleMoves =[];
+let posibleMoves = [];
 
 document.addEventListener("DOMContentLoaded", () => {
-
     document.querySelectorAll(".soldier").forEach(soldier => {
         soldier.addEventListener("click", ({ target }) => {
             removeMoves();
@@ -24,16 +23,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 document.querySelector("#row-" + parseInt(move / 10) + " .col-" + parseInt(move % 10)).classList.add("posibleMove");
             } else if (target.classList.contains("castle")) {
-                let nextMove = parseInt(currentPos) - 10;
-
-                while (document.querySelector("#row-" + parseInt(nextMove / 10) + " .col-" + parseInt(nextMove % 10)).hasChildNodes() == false) {
-                    posibleMoves.push(document.querySelector("#row-" + parseInt(nextMove / 10) + " .col-" + parseInt(nextMove % 10)));
+                for (let j = 1; j <= 8; j++) {
+                    let number = (parseInt(currentPos / 10) * 10) + j;
+                    for (let k = 0; k < 2; k++) {
+                        if (document.querySelector("#row-" + parseInt(number / 10) + " .col-" + parseInt(number % 10)) != null && document.querySelector("#row-" + parseInt(number / 10) + " .col-" + parseInt(number % 10)).hasChildNodes() == false) {
+                            posibleMoves.push(document.querySelector("#row-" + parseInt(number / 10) + " .col-" + parseInt(number % 10)));
+                        }
+                        number = parseInt(currentPos % 10) + (j * 10);
+                    }
                 }
-
-                console.log(posibleMoves);
                 addMoves();
             }
-            console.log("hii");
             MoveSoldier();
         });
     });
@@ -57,14 +57,15 @@ function removeMoves() {
         cell.removeAttribute("onclick");
         cell.classList.remove("posibleMove");
     });
+    posibleMoves = [];
 }
 
 function MoveSoldier() {
     document.querySelectorAll(".posibleMove").forEach(cell => {
-        cell.setAttribute("onclick","move(event)");
+        cell.setAttribute("onclick", "move(event)");
     });
 }
 
-function move({target}) {
+function move({ target }) {
     target.append(currentSoldier);
 }
