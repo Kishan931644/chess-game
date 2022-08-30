@@ -11,29 +11,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let currentRow = target.closest(".row");
             let currentCol = target.closest(".cell");
-            let currentPos = currentRow.dataset["row"] + currentCol.dataset["col"];
+            let currentPos = parseInt(currentRow.dataset["row"] + currentCol.dataset["col"]);
 
             if (target.classList.contains("pawn")) {
                 let move;
                 if (target.classList.contains("white-piece")) {
-                    move = parseInt(currentPos) - 10;
+                    move = currentPos - 10;
                 } else if (target.classList.contains("black-piece")) {
-                    move = parseInt(currentPos) + 10;
+                    move = currentPos + 10;
                 }
 
                 document.querySelector("#row-" + parseInt(move / 10) + " .col-" + parseInt(move % 10)).classList.add("posibleMove");
             } else if (target.classList.contains("castle")) {
                 for (let j = 1; j <= 8; j++) {
                     let number = (parseInt(currentPos / 10) * 10) + j;
+
                     for (let k = 0; k < 2; k++) {
-                        if (document.querySelector("#row-" + parseInt(number / 10) + " .col-" + parseInt(number % 10)) != null && document.querySelector("#row-" + parseInt(number / 10) + " .col-" + parseInt(number % 10)).hasChildNodes() == false) {
-                            posibleMoves.push(document.querySelector("#row-" + parseInt(number / 10) + " .col-" + parseInt(number % 10)));
-                        }
+                        var selectedEle = document.querySelector("#row-" + parseInt(number / 10) + " .col-" + parseInt(number % 10))
+
+                        if (selectedEle != null && selectedEle.hasChildNodes() == false)
+                            posibleMoves.push(selectedEle);
+
                         number = parseInt(currentPos % 10) + (j * 10);
                     }
                 }
-                addMoves();
+            } else if (target.classList.contains("bishop")) {
+                for (let j = 1; j <= 8; j++) {
+                    let number = (parseInt(currentPos / 10) * 10) + j;
+
+                    for (let k = 0; k < 2; k++) {
+                        var selectedEle = document.querySelector("#row-" + parseInt(number / 10) + " .col-" + parseInt(number % 10))
+
+                        if (selectedEle != null && selectedEle.hasChildNodes() == false)
+                            posibleMoves.push(selectedEle);
+
+                        number = parseInt(currentPos % 10) + (j * 10);
+                    }
+                }
             }
+            addMoves();
             MoveSoldier();
         });
     });
