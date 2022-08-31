@@ -7,6 +7,7 @@
 body {
     height: 100vh;
     width: 100vw;
+    padding: 1rem 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,6 +31,15 @@ body {
     align-items: center;
     justify-content: center;
     user-select: none;
+    --black-color: rgb(177, 176, 176);
+}
+
+.row:nth-child(2n) .cell:nth-child(2n) {
+    background-color: var(--black-color);
+}
+
+.row:nth-child(2n-1) .cell:nth-child(2n+ 1) {
+    background-color: var(--black-color);
 }
 
 .cell span {
