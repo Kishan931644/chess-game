@@ -1,6 +1,10 @@
-*{ margin: 0;padding: 0;box-sizing: border-box; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-body{
+body {
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -8,23 +12,30 @@ body{
     justify-content: center;
 }
 
-.main-container{
+.main-container {
     display: flex;
     flex-direction: column;
     border: 1px solid black;
 }
-.row{
+
+.row {
     display: flex;
 }
-.row .cell{
+
+.row .cell {
     width: 5rem;
     height: 5rem;
     border: 1px solid black;
-    display: flex;align-items: center;justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
 }
-.cell span{
+
+.cell span {
     font-size: 4rem;
 }
-.posibleMove{
+
+.posibleMove {
     background-color: #96e79d91;
 }

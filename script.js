@@ -21,34 +21,93 @@ document.addEventListener("DOMContentLoaded", () => {
                     move = currentPos + 10;
                 }
 
-                document.querySelector("#row-" + parseInt(move / 10) + " .col-" + parseInt(move % 10)).classList.add("posibleMove");
-            } else if (target.classList.contains("castle")) {
-                for (let j = 1; j <= 8; j++) {
-                    let number = (parseInt(currentPos / 10) * 10) + j;
-
-                    for (let k = 0; k < 2; k++) {
-                        var selectedEle = document.querySelector("#row-" + parseInt(number / 10) + " .col-" + parseInt(number % 10))
-
-                        if (selectedEle != null && selectedEle.hasChildNodes() == false)
-                            posibleMoves.push(selectedEle);
-
-                        number = parseInt(currentPos % 10) + (j * 10);
+                pushElementInArray(move / 10, move % 10);
+            } else if (target.classList.contains("castle") || target.classList.contains("queen")) {
+                for (let rowUp = parseInt(currentRow.dataset["row"]) - 1; rowUp >= 1; rowUp--) {
+                    if (pushElementInArray(rowUp, currentCol.dataset["col"]) == false) {
+                        break;
                     }
                 }
-            } else if (target.classList.contains("bishop")) {
-                for (let j = 1; j <= 8; j++) {
-                    let number = (parseInt(currentPos / 10) * 10) + j;
 
-                    for (let k = 0; k < 2; k++) {
-                        var selectedEle = document.querySelector("#row-" + parseInt(number / 10) + " .col-" + parseInt(number % 10))
+                for (let rowDown = parseInt(currentRow.dataset["row"]) + 1; rowDown <= 8; rowDown++) {
+                    if (pushElementInArray(rowDown, currentCol.dataset["col"]) == false) {
+                        break;
+                    }
+                }
+                for (let colLeft = parseInt(currentCol.dataset["col"]) - 1; colLeft >= 1; colLeft--) {
+                    if (pushElementInArray(currentRow.dataset["row"], colLeft) == false) {
+                        break;
+                    }
+                }
 
-                        if (selectedEle != null && selectedEle.hasChildNodes() == false)
-                            posibleMoves.push(selectedEle);
+                for (let colRight = parseInt(currentCol.dataset["col"]) + 1; colRight <= 8; colRight++) {
+                    if (pushElementInArray(currentRow.dataset["row"], colRight) == false) {
+                        break;
+                    }
+                }
 
-                        number = parseInt(currentPos % 10) + (j * 10);
+            } else if (target.classList.contains("knight")) {
+                // Down right left
+                pushElementInArray(parseInt(currentRow.dataset["row"]) + 2, parseInt(currentCol.dataset["col"]) + 1);
+                pushElementInArray(parseInt(currentRow.dataset["row"]) + 2, parseInt(currentCol.dataset["col"]) - 1);
+
+                // Up right left
+                pushElementInArray(parseInt(currentRow.dataset["row"]) - 2, parseInt(currentCol.dataset["col"]) - 1);
+                pushElementInArray(parseInt(currentRow.dataset["row"]) - 2, parseInt(currentCol.dataset["col"]) + 1);
+
+                // right up Down
+                pushElementInArray(parseInt(currentRow.dataset["row"]) + 1, parseInt(currentCol.dataset["col"]) + 2);
+                pushElementInArray(parseInt(currentRow.dataset["row"]) - 1, parseInt(currentCol.dataset["col"]) + 2);
+
+                // left up down
+                pushElementInArray(parseInt(currentRow.dataset["row"]) + 1, parseInt(currentCol.dataset["col"]) - 2);
+                pushElementInArray(parseInt(currentRow.dataset["row"]) - 1, parseInt(currentCol.dataset["col"]) - 2);
+            } else if (target.classList.contains("king")) {
+                pushElementInArray(parseInt(currentRow.dataset["row"]) + 1, parseInt(currentCol.dataset["col"]));
+                pushElementInArray(parseInt(currentRow.dataset["row"]) + 1, parseInt(currentCol.dataset["col"]) + 1);
+
+                pushElementInArray(parseInt(currentRow.dataset["row"]) - 1, parseInt(currentCol.dataset["col"]));
+                pushElementInArray(parseInt(currentRow.dataset["row"]) - 1, parseInt(currentCol.dataset["col"]) - 1);
+
+                pushElementInArray(parseInt(currentRow.dataset["row"]), parseInt(currentCol.dataset["col"]) + 1);
+                pushElementInArray(parseInt(currentRow.dataset["row"]) - 1, parseInt(currentCol.dataset["col"]) + 1);
+
+                pushElementInArray(parseInt(currentRow.dataset["row"]), parseInt(currentCol.dataset["col"]) - 1);
+                pushElementInArray(parseInt(currentRow.dataset["row"]) + 1, parseInt(currentCol.dataset["col"]) - 1);
+
+            }
+
+            if (target.classList.contains("bishop") || target.classList.contains("queen")) {
+                for (let upRight = parseInt(currentRow.dataset["row"]) - 1, j = 1; upRight >= 1, j <= 8; upRight--, j++) {
+                    var colNumber = parseInt(currentCol.dataset["col"]) + j;
+                    if (pushElementInArray(upRight, colNumber) == false) {
+                        break;
+                    }
+                }
+
+                for (let downLeft = parseInt(currentRow.dataset["row"]) + 1, j = 1; downLeft <= 8, j <= 8; downLeft++, j++) {
+                    var colNumber = parseInt(currentCol.dataset["col"]) - j;
+                    if (pushElementInArray(downLeft, colNumber) == false) {
+                        break;
+                    }
+                }
+
+                for (let upLeft = parseInt(currentCol.dataset["col"]) - 1, j = 1; upLeft >= 1, j <= 8; upLeft--, j++) {
+                    var rowNumber = parseInt(currentRow.dataset["row"]) - j;
+                    if (pushElementInArray(rowNumber, upLeft) == false) {
+                        break;
+                    }
+                }
+
+                for (let downRight = parseInt(currentCol.dataset["col"]) + 1, j = 1; downRight <= 8, j <= 8; downRight++, j++) {
+                    var rowNumber = parseInt(currentRow.dataset["row"]) + j;
+
+                    if (pushElementInArray(rowNumber, downRight) == false) {
+                        break;
                     }
                 }
             }
+
             addMoves();
             MoveSoldier();
         });
@@ -61,6 +120,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+
+function pushElementInArray(rowNumber, colNumber) {
+    colNumber = parseInt(colNumber);
+    rowNumber = parseInt(rowNumber);
+    var selectedEle = document.querySelector("#row-" + rowNumber + " .col-" + colNumber)
+
+    if (selectedEle != null && selectedEle.hasChildNodes() == false) {
+        posibleMoves.push(selectedEle);
+        return true;
+    } else {
+        return false;
+    }
+}
 
 function addMoves() {
     posibleMoves.forEach(element => {
