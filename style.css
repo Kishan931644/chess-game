@@ -49,3 +49,7 @@ body {
 .posibleMove {
     background-color: #96e79d91 !important;
 }
+
+.not-movable {
+    pointer-events: none;
+}
