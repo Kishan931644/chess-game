@@ -47,5 +47,5 @@ body {
 }
 
 .posibleMove {
-    background-color: #96e79d91;
+    background-color: #96e79d91 !important;
 }
