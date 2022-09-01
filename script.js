@@ -144,13 +144,13 @@ document.addEventListener("DOMContentLoaded", () => {
 function pushElementInArray(type, rowNumber, colNumber) {
     colNumber = parseInt(colNumber);
     rowNumber = parseInt(rowNumber);
-    var selectedEle = document.querySelector("#row-" + rowNumber + " .col-" + colNumber)
+    var selectedEle = document.querySelector("#row-" + rowNumber + " .col-" + colNumber);
     if (selectedEle == null) {
-        return false
-    } else if (selectedEle.hasChildNodes() == false) {
+        return false;
+    } else if (selectedEle.children.length == 0) {
         posibleMoves.push(selectedEle);
         return true;
-    } else if (selectedEle.hasChildNodes() != false && selectedEle.children[0].classList[1] != type) {
+    } else if (selectedEle.children.length != 0 && selectedEle.children[0].classList[1] != type) {
         posibleMoves.push(selectedEle);
         return false;
     } else {
@@ -181,7 +181,7 @@ function MoveSoldier() {
 }
 
 function move({ target }) {
-    if (target.hasChildNodes() == true)
+    if (target.children.length != 0)
         target.children[0].remove();
 
     target.append(currentSoldier);
